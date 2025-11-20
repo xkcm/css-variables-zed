@@ -1,4 +1,5 @@
 :root {
   --primary: red;
   --color: var(--primary);
+  --secondary-color: green;
 }

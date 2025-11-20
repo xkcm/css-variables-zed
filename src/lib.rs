@@ -51,10 +51,8 @@ impl zed::Extension for CssVariablesExtension {
 }
 
 fn build_css_variables_command(worktree: &zed::Worktree) -> zed::Result<zed::Command> {
-    // Use Zed's built-in Node & NPM helpers to install and run
-    // `css-variables-language-server` in the extension's own work directory.
-    let package = "css-variables-language-server";
-    let version = "2.7.0";
+    let package = "css-variable-lsp";
+    let version = "1.0.0";
 
     // Install the package if it's missing or on a different version.
     match zed::npm_package_installed_version(package)? {
@@ -68,17 +66,16 @@ fn build_css_variables_command(worktree: &zed::Worktree) -> zed::Result<zed::Com
 
     let node = zed::node_binary_path()?;
 
-    // Start with the worktree's shell environment so PATH and other vars are inherited.
-    let env = worktree.shell_env();
+        let env = worktree.shell_env();
+        return Ok(zed::Command {
+            command: node,
+            args: vec![
+            "node_modules/css-variable-lsp/server/out/server/src/server.js".to_string(),
+                "--stdio".to_string(),
+            ],
+            env,
+        });
 
-    Ok(zed::Command {
-        command: node,
-        args: vec![
-            "node_modules/css-variables-language-server/bin/index.js".to_string(),
-            "--stdio".to_string(),
-        ],
-        env,
-    })
 }
 
 zed::register_extension!(CssVariablesExtension);
