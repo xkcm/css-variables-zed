@@ -52,7 +52,7 @@ impl zed::Extension for CssVariablesExtension {
 
 fn build_css_variables_command(worktree: &zed::Worktree) -> zed::Result<zed::Command> {
     let package = "css-variable-lsp";
-    let version = "1.0.2";
+    let version = "1.0.5";
 
     // Install the package if it's missing or on a different version.
     match zed::npm_package_installed_version(package)? {
@@ -83,6 +83,7 @@ fn build_css_variables_command(worktree: &zed::Worktree) -> zed::Result<zed::Com
         command: node,
         args: vec![
             bin_path.to_string_lossy().to_string(),
+            "--color-only-variables".to_string(),
             "--stdio".to_string(),
         ],
         env,
