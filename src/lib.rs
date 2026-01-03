@@ -26,57 +26,62 @@ impl zed::Extension for CssVariablesExtension {
         _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> zed::Result<Option<zed::serde_json::Value>> {
-        // Return default settings matching css-variables-language-server's defaultSettings.
-        // We nest them under the `cssVariables` key because the server calls
-        // `connection.workspace.getConfiguration('cssVariables')`, and Zed's
-        // bridge likely indexes into this object by that key.
-        let mut settings = zed::serde_json::json!({
-            "cssVariables": {
-                "lookupFiles": [
-                    "**/*.less",
-                    "**/*.scss",
-                    "**/*.sass",
-                    "**/*.css",
-                    "**/*.html",
-                    "**/*.vue",
-                    "**/*.svelte",
-                    "**/*.astro",
-                    "**/*.ripple"
-                ],
-                "blacklistFolders": [
-                    "**/.cache",
-                    "**/.DS_Store",
-                    "**/.git",
-                    "**/.hg",
-                    "**/.next",
-                    "**/.svn",
-                    "**/bower_components",
-                    "**/CVS",
-                    "**/dist",
-                    "**/node_modules",
-                    "**/tests",
-                    "**/tmp",
-                ],
-            }
-        });
-
         if let Ok(lsp_settings) = LspSettings::for_worktree("css_variables", worktree) {
-            if let Some(user_settings) = lsp_settings.settings {
-                let mut merged = user_settings;
-
-                let needs_wrap = merged.get("cssVariables").is_none()
-                    && (merged.get("lookupFiles").is_some()
-                        || merged.get("blacklistFolders").is_some());
-                if needs_wrap {
-                    merged = zed::serde_json::json!({ "cssVariables": merged });
-                }
-
-                merge_json_value(&mut settings, &merged);
-            }
+            return Ok(Some(build_workspace_settings(lsp_settings.settings)));
         }
 
-        Ok(Some(settings))
+        Ok(Some(build_workspace_settings(None)))
     }
+}
+
+fn build_workspace_settings(user_settings: Option<Value>) -> Value {
+    // Return default settings matching css-variables-language-server's defaultSettings.
+    // We nest them under the `cssVariables` key because the server calls
+    // `connection.workspace.getConfiguration('cssVariables')`, and Zed's
+    // bridge likely indexes into this object by that key.
+    let mut settings = zed::serde_json::json!({
+        "cssVariables": {
+            "lookupFiles": [
+                "**/*.less",
+                "**/*.scss",
+                "**/*.sass",
+                "**/*.css",
+                "**/*.html",
+                "**/*.vue",
+                "**/*.svelte",
+                "**/*.astro",
+                "**/*.ripple"
+            ],
+            "blacklistFolders": [
+                "**/.cache",
+                "**/.DS_Store",
+                "**/.git",
+                "**/.hg",
+                "**/.next",
+                "**/.svn",
+                "**/bower_components",
+                "**/CVS",
+                "**/dist",
+                "**/node_modules",
+                "**/tests",
+                "**/tmp",
+            ],
+        }
+    });
+
+    if let Some(user_settings) = user_settings {
+        let mut merged = user_settings;
+
+        let needs_wrap = merged.get("cssVariables").is_none()
+            && (merged.get("lookupFiles").is_some() || merged.get("blacklistFolders").is_some());
+        if needs_wrap {
+            merged = zed::serde_json::json!({ "cssVariables": merged });
+        }
+
+        merge_json_value(&mut settings, &merged);
+    }
+
+    settings
 }
 
 fn merge_json_value(base: &mut Value, overlay: &Value) {
@@ -138,3 +143,60 @@ fn build_css_variables_command(worktree: &zed::Worktree) -> zed::Result<zed::Com
 }
 
 zed::register_extension!(CssVariablesExtension);
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use zed::serde_json::json;
+
+    #[test]
+    fn merges_nested_css_variables_settings() {
+        let user_settings = json!({
+            "cssVariables": {
+                "lookupFiles": ["**/*.css"],
+                "blacklistFolders": ["**/dist"]
+            }
+        });
+
+        let settings = build_workspace_settings(Some(user_settings));
+
+        assert_eq!(settings["cssVariables"]["lookupFiles"], json!(["**/*.css"]));
+        assert_eq!(
+            settings["cssVariables"]["blacklistFolders"],
+            json!(["**/dist"])
+        );
+    }
+
+    #[test]
+    fn wraps_top_level_settings() {
+        let user_settings = json!({
+            "lookupFiles": ["**/*.scss"],
+            "blacklistFolders": ["**/vendor"]
+        });
+
+        let settings = build_workspace_settings(Some(user_settings));
+
+        assert_eq!(
+            settings["cssVariables"]["lookupFiles"],
+            json!(["**/*.scss"])
+        );
+        assert_eq!(
+            settings["cssVariables"]["blacklistFolders"],
+            json!(["**/vendor"])
+        );
+    }
+
+    #[test]
+    fn keeps_defaults_when_only_one_setting_is_overridden() {
+        let user_settings = json!({
+            "cssVariables": {
+                "lookupFiles": ["**/*.vue"]
+            }
+        });
+
+        let settings = build_workspace_settings(Some(user_settings));
+
+        assert_eq!(settings["cssVariables"]["lookupFiles"], json!(["**/*.vue"]));
+        assert!(settings["cssVariables"]["blacklistFolders"].is_array());
+    }
+}

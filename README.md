@@ -22,7 +22,9 @@ On first use, the extension installs `css-variable-lsp@1.0.8-beta.1` via Zed's `
 
 ## Configuration
 
-You can override the lookup globs and folder blacklist via Zed settings:
+You can override the lookup globs and folder blacklist via Zed settings. Open
+the Settings JSON (Cmd+, then "Open Settings JSON") or a workspace
+`.zed/settings.json`, and add:
 
 ```json
 {
@@ -39,7 +41,21 @@ You can override the lookup globs and folder blacklist via Zed settings:
 }
 ```
 
-For convenience, you can also place `lookupFiles` and `blacklistFolders` at the top level of `settings` and the extension will nest them under `cssVariables`.
+For convenience, you can also place `lookupFiles` and `blacklistFolders` at the
+top level of `settings` and the extension will nest them under `cssVariables`:
+
+```json
+{
+  "lsp": {
+    "css_variables": {
+      "settings": {
+        "lookupFiles": ["**/*.css", "**/*.scss", "**/*.vue"],
+        "blacklistFolders": ["**/dist", "**/node_modules"]
+      }
+    }
+  }
+}
+```
 
 Defaults:
 
