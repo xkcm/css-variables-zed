@@ -41,6 +41,34 @@ You can override the lookup globs and folder blacklist via Zed settings:
 
 For convenience, you can also place `lookupFiles` and `blacklistFolders` at the top level of `settings` and the extension will nest them under `cssVariables`.
 
+Defaults:
+
+- `lookupFiles`:
+  - `**/*.less`
+  - `**/*.scss`
+  - `**/*.sass`
+  - `**/*.css`
+  - `**/*.html`
+  - `**/*.vue`
+  - `**/*.svelte`
+  - `**/*.astro`
+  - `**/*.ripple`
+- `blacklistFolders`:
+  - `**/.cache`
+  - `**/.DS_Store`
+  - `**/.git`
+  - `**/.hg`
+  - `**/.next`
+  - `**/.svn`
+  - `**/bower_components`
+  - `**/CVS`
+  - `**/dist`
+  - `**/node_modules`
+  - `**/tests`
+  - `**/tmp`
+
+Both settings accept standard glob patterns (including brace expansions like `**/*.{css,scss}`).
+
 ## Development
 
 ### Prerequisites
