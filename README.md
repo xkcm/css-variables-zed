@@ -85,6 +85,64 @@ Defaults:
 
 Both settings accept standard glob patterns (including brace expansions like `**/*.{css,scss}`).
 
+## LSP Flags & Environment
+
+The extension launches `css-variable-lsp` with `--color-only-variables` and `--stdio`.
+
+Supported LSP flags:
+
+- `--no-color-preview`
+- `--color-only-variables`
+- `--lookup-files "<glob>,<glob>"`
+- `--lookup-file "<glob>"` (repeatable)
+- `--path-display=relative|absolute|abbreviated`
+- `--path-display-length=N`
+
+Supported environment variables:
+
+- `CSS_LSP_COLOR_ONLY_VARIABLES=1`
+- `CSS_LSP_LOOKUP_FILES` (comma-separated globs)
+- `CSS_LSP_DEBUG=1`
+- `CSS_LSP_PATH_DISPLAY=relative|absolute|abbreviated`
+- `CSS_LSP_PATH_DISPLAY_LENGTH=1`
+
+Defaults:
+
+- `path-display`: `relative`
+- `path-display-length`: `1`
+- LSP lookup globs:
+  - `**/*.css`
+  - `**/*.scss`
+  - `**/*.sass`
+  - `**/*.less`
+  - `**/*.html`
+  - `**/*.vue`
+  - `**/*.svelte`
+  - `**/*.astro`
+  - `**/*.ripple`
+- LSP ignore globs:
+  - `**/node_modules/**`
+  - `**/dist/**`
+  - `**/out/**`
+  - `**/.git/**`
+
+Note: Passing additional flags to the LSP from Zed requires a custom wrapper or environment configuration.
+
+### Completion Path Examples
+
+Assume a variable is defined in `/Users/you/project/src/styles/theme.css` and your workspace root is `/Users/you/project`.
+
+- `--path-display=relative` (default):
+  - `Defined in src/styles/theme.css`
+- `--path-display=absolute`:
+  - `Defined in /Users/you/project/src/styles/theme.css`
+- `--path-display=abbreviated --path-display-length=1`:
+  - `Defined in s/s/theme.css`
+- `--path-display=abbreviated --path-display-length=2`:
+  - `Defined in sr/st/theme.css`
+- `--path-display=abbreviated --path-display-length=0`:
+  - `Defined in src/styles/theme.css`
+
 ## Development
 
 ### Prerequisites
