@@ -128,6 +128,21 @@ Defaults:
 
 Note: Passing additional flags to the LSP from Zed requires a custom wrapper or environment configuration.
 
+### Completion Path Examples
+
+Assume a variable is defined in `/Users/you/project/src/styles/theme.css` and your workspace root is `/Users/you/project`.
+
+- `--path-display=relative` (default):
+  - `Defined in src/styles/theme.css`
+- `--path-display=absolute`:
+  - `Defined in /Users/you/project/src/styles/theme.css`
+- `--path-display=abbreviated --path-display-length=1`:
+  - `Defined in s/s/theme.css`
+- `--path-display=abbreviated --path-display-length=2`:
+  - `Defined in sr/st/theme.css`
+- `--path-display=abbreviated --path-display-length=0`:
+  - `Defined in src/styles/theme.css`
+
 ## Development
 
 ### Prerequisites
