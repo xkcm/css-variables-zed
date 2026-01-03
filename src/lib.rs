@@ -70,15 +70,9 @@ fn build_workspace_settings(user_settings: Option<Value>) -> Value {
     });
 
     if let Some(user_settings) = user_settings {
-        let mut merged = user_settings;
-
-        let needs_wrap = merged.get("cssVariables").is_none()
-            && (merged.get("lookupFiles").is_some() || merged.get("blacklistFolders").is_some());
-        if needs_wrap {
-            merged = zed::serde_json::json!({ "cssVariables": merged });
+        if user_settings.get("cssVariables").is_some() {
+            merge_json_value(&mut settings, &user_settings);
         }
-
-        merge_json_value(&mut settings, &merged);
     }
 
     settings
@@ -168,7 +162,7 @@ mod tests {
     }
 
     #[test]
-    fn wraps_top_level_settings() {
+    fn ignores_top_level_settings() {
         let user_settings = json!({
             "lookupFiles": ["**/*.scss"],
             "blacklistFolders": ["**/vendor"]
@@ -177,13 +171,10 @@ mod tests {
         let settings = build_workspace_settings(Some(user_settings));
 
         assert_eq!(
-            settings["cssVariables"]["lookupFiles"],
-            json!(["**/*.scss"])
+            settings["cssVariables"]["lookupFiles"][0],
+            json!("**/*.less")
         );
-        assert_eq!(
-            settings["cssVariables"]["blacklistFolders"],
-            json!(["**/vendor"])
-        );
+        assert!(settings["cssVariables"]["blacklistFolders"].is_array());
     }
 
     #[test]

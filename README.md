@@ -41,21 +41,7 @@ the Settings JSON (Cmd+, then "Open Settings JSON") or a workspace
 }
 ```
 
-For convenience, you can also place `lookupFiles` and `blacklistFolders` at the
-top level of `settings` and the extension will nest them under `cssVariables`:
-
-```json
-{
-  "lsp": {
-    "css_variables": {
-      "settings": {
-        "lookupFiles": ["**/*.css", "**/*.scss", "**/*.vue"],
-        "blacklistFolders": ["**/dist", "**/node_modules"]
-      }
-    }
-  }
-}
-```
+Settings must be nested under the `cssVariables` key.
 
 Defaults:
 
