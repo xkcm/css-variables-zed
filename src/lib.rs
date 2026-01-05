@@ -14,11 +14,11 @@ impl zed::Extension for CssVariablesExtension {
         language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> zed::Result<zed::Command> {
-        if language_server_id.as_ref() != "css_variables" {
+        if language_server_id.as_ref() != "css-variables" {
             return Err(format!("Unknown language server id: {language_server_id}"));
         }
 
-        let user_settings = LspSettings::for_worktree("css_variables", worktree)
+        let user_settings = LspSettings::for_worktree("css-variables", worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.settings);
 
@@ -30,7 +30,7 @@ impl zed::Extension for CssVariablesExtension {
         _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> zed::Result<Option<zed::serde_json::Value>> {
-        if let Ok(lsp_settings) = LspSettings::for_worktree("css_variables", worktree) {
+        if let Ok(lsp_settings) = LspSettings::for_worktree("css-variables", worktree) {
             return Ok(Some(build_workspace_settings(lsp_settings.settings)));
         }
 

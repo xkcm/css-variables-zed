@@ -29,7 +29,7 @@ the Settings JSON (Cmd+, then "Open Settings JSON") or a workspace
 ```json
 {
   "lsp": {
-    "css_variables": {
+    "css-variables": {
       "settings": {
         "cssVariables": {
           "lookupFiles": ["**/*.css", "**/*.scss", "**/*.vue"],

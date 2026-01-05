@@ -10,7 +10,7 @@ repository = "https://github.com/lmn451/css-variables-zed"
 kind = "npm:install"
 package = "css-variable-lsp"
 
-[language_servers.css_variables]
+[language_servers.css-variables]
 name = "CSS Variables Language Server"
 
 languages = [
@@ -29,7 +29,7 @@ languages = [
   "PostCSS"
 ]
 
-[language_servers.css_variables.language_ids]
+[language_servers.css-variables.language_ids]
 CSS = "css"
 SCSS = "scss"
 Sass = "sass"
