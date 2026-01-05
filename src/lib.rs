@@ -105,7 +105,7 @@ fn build_css_variables_command(
     user_settings: Option<Value>,
 ) -> zed::Result<zed::Command> {
     let package = "css-variable-lsp";
-    let version = "1.0.10";
+    let version = "1.0.11";
 
     // Install the package if it's missing or on a different version.
     match zed::npm_package_installed_version(package)? {
@@ -138,7 +138,10 @@ fn build_css_variables_command(
 
     let env = worktree.shell_env();
     let mut args = vec![entrypoint_path.to_string_lossy().to_string()];
-    args.extend(build_css_variables_args(user_settings));
+    
+    // Build merged settings with defaults so CLI args include defaults when user has no custom settings
+    let merged_settings = build_workspace_settings(user_settings);
+    args.extend(build_css_variables_args(Some(merged_settings)));
 
     Ok(zed::Command {
         command: node,

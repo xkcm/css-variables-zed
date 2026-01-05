@@ -24,7 +24,7 @@
 
 ✅ **Extension Configuration**
 - [x] `npm:install` capability declared
-- [x] LSP version: css-variable-lsp@1.0.10
+- [x] LSP version: css-variable-lsp@1.0.11
 - [x] Extension metadata complete (name, description, repository)
 - [x] License specified (GPL-3.0)
 
