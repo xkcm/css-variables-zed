@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.7
+
+- Updated to `css-variable-lsp` v1.0.12
+
 ## 0.0.6
 
 - Updated to `css-variable-lsp` v1.0.11

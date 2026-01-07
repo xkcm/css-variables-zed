@@ -18,7 +18,7 @@ Project-wide CSS custom properties (variables) support for Zed, powered by `css-
 3. Search for "CSS Variables"
 4. Click Install
 
-On first use, the extension installs `css-variable-lsp@1.0.11` via Zed's `npm:install` capability using Zed's built-in Node.js runtime. No manual Node.js or npm setup is required.
+On first use, the extension installs `css-variable-lsp@1.0.12` via Zed's `npm:install` capability using Zed's built-in Node.js runtime. No manual Node.js or npm setup is required.
 
 ## Configuration
 
@@ -177,8 +177,8 @@ cargo test --lib
 - Cascade resolution is best-effort; the LSP does not model DOM nesting or selector combinators.
 - Rename operations replace full declarations/usages and may adjust formatting.
 
-### Latest: v0.0.6
+### Latest: v0.0.7
 
-- Pins `css-variable-lsp` to v1.0.11
+- Pins `css-variable-lsp` to v1.0.12
 - Uses `npm:install` for automatic dependency setup
 - Runs the server with `--color-only-variables` by default
